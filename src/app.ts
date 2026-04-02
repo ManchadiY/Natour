@@ -1,42 +1,47 @@
 // console.log("hello yuvraj");
 
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import morgan from "morgan";
+import AppError from "./utils/appErro";
+import globalErrorHandler from "./controller/errorController";
+import UserRoutes from "./routes/userRoutes";
 const express = require("express");
-
 const app = express();
-
 app.use(express.json());
+
+app.use(morgan("dev"));
 
 const port = 3000;
 
 app.get("/", (req: Request, res: Response) => {
   // console.log("req", req);
-
   res.send("Hello World!");
 });
 
+app.use("/api/v1/users", UserRoutes);
+
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log("Undefined route accessed:", req.originalUrl);
-  // res.status(404).json({ message: "Route not found" });
-  const err = new Error("route not found") as any;
-  err.statuscode = 404;
-  err.status = "failed";
-
-  next(err);
+  // const err = new Error("route not found") as any;
+  // err.statuscode = 404;
+  // err.status = "failed";
+  // next(err);
+  // calling error using the global class
+  next(new AppError("route not found", 404));
 });
 
-app.use((err: any, req: any, res: any, next: any) => {
-  console.log("hello");
-  err.statuscode = err.statuscode || 400;
-  err.status = err.status || "failed";
+// global error handler takes 4 parameter err,req,res,next
+// app.use((err: any, req: any, res: any, next: any) => {
+//   err.statuscode = err.statuscode || 400;
+//   err.status = err.status || "failed";
+//   res.status(err.statuscode).json({
+//     status: err.status,
+//     message: err.message,
+//   });
+// });
 
-  res.status(err.statuscode).json({
-    status: err.status,
-    message: err.message,
-  });
-});
+app.use(globalErrorHandler);
 
-module.exports = app;
+export default app;
 
 //simple http sever using http module
 /*
