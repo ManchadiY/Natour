@@ -1,24 +1,35 @@
 // console.log("hello yuvraj");
-
-import { NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import AppError from "./utils/appErro";
 import globalErrorHandler from "./controller/errorController";
 import UserRoutes from "./routes/userRoutes";
-const express = require("express");
+import TourRoutes from "./routes/tourRoutes";
+import ReviewRoutes from "./routes/reviewRoutes";
+
 const app = express();
 app.use(express.json());
-
 app.use(morgan("dev"));
-
 const port = 3000;
 
+//http way
+// app.get("/", (req: Request, res: Response) => {
+//   // console.log("req", req);
+//   res.send("Hello World!");
+// });
+
+//express way
 app.get("/", (req: Request, res: Response) => {
   // console.log("req", req);
-  res.send("Hello World!");
+  res.status(200).json({
+    status: "success",
+    message: "Hello World!",
+  });
 });
 
-app.use("/api/v1/users", UserRoutes);
+app.use("/api/v1/users", UserRoutes); //user based routes
+app.use("/api/v1/tours", TourRoutes);
+app.use("/api/v1/reviews", ReviewRoutes);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   // const err = new Error("route not found") as any;

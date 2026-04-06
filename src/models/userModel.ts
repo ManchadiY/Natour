@@ -1,9 +1,6 @@
 //create a user model with name,role,actice,email,password
-
 import mongoose from "mongoose";
-
 // 1)create a schema
-
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -47,7 +44,6 @@ const userSchema = new mongoose.Schema({
 });
 
 //2 create a model based on schema
-
 const User = mongoose.model("User", userSchema);
 
 export default User;
