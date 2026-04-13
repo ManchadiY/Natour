@@ -34,6 +34,7 @@ const connectionString = DB.replace("<password>", DB_PASSWORD);
 
 (async (): Promise<void> => {
   await mongoose.connect(connectionString);
+  console.log("connecting to db");
 })();
 // (async (): Promise<void> => {
 //   try {
