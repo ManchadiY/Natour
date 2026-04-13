@@ -9,8 +9,8 @@ import ReviewRoutes from "./routes/reviewRoutes";
 
 const app = express();
 app.use(express.json());
+app.set("query parser", "extended");
 app.use(morgan("dev"));
-const port = 3000;
 
 //http way
 // app.get("/", (req: Request, res: Response) => {
@@ -28,8 +28,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/users", UserRoutes); //user based routes
-app.use("/api/v1/tours", TourRoutes);
-app.use("/api/v1/reviews", ReviewRoutes);
+app.use("/api/v1/tours", TourRoutes); //tour based
+app.use("/api/v1/reviews", ReviewRoutes); //review
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   // const err = new Error("route not found") as any;

@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import * as bcrypt from "bcrypt";
 import User from "../models/userModel";
+import { getAll, getOne } from "./handleFactory";
 
 async function createuser(req: Request, res: Response) {
   try {
@@ -17,7 +18,6 @@ async function createuser(req: Request, res: Response) {
     }
     // 2)check if user already exist
     const checkIfUserExist = await User.findOne({ email });
-
     if (checkIfUserExist) {
       res.status(409).json({
         status: "failed",
@@ -101,4 +101,8 @@ async function login(req: Request, res: Response) {
   }
 }
 
-export { createuser, login };
+const getUser = getOne(User);
+
+const getAllUsers = getAll(User);
+
+export { createuser, login, getUser, getAllUsers };
